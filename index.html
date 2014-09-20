@@ -20,6 +20,8 @@
   </head>
   <body>
     <div id="example"></div>
+<video id="monitor" autoplay width="160" height="120" style="visibility: hidden; float:left;"></video>
+<canvas id="videoImage" width="160" height="120" style="visibility: hidden; float:left;"></canvas>
 
   <script src="js/third-party/threejs/three.min.js"></script>
   <script src="js/third-party/threejs/StereoEffect.js"></script>
@@ -27,6 +29,15 @@
   <script src="js/third-party/threejs/OrbitControls.js"></script>
 
   <script>
+  
+
+
+    navigator.getUserMedia  = navigator.getUserMedia ||
+                              navigator.webkitGetUserMedia ||
+                              navigator.mozGetUserMedia ||
+                              navigator.msGetUserMedia;
+
+    var video, videoImage;
     var camera, scene, renderer;
     var effect, controls;
     var element, container;
@@ -37,6 +48,8 @@
     animate();
 
     function init() {
+
+    
       renderer = new THREE.WebGLRenderer();
       element = renderer.domElement;
       container = document.getElementById('example');
@@ -76,6 +89,14 @@
       window.addEventListener('deviceorientation', setOrientationControls, true);
 
 
+      initScene();
+      
+      window.addEventListener('resize', resize, false);
+      setTimeout(resize, 1);
+    }
+    
+    function initScene() {
+      
       var light = new THREE.HemisphereLight(0x777777, 0x000000, 0.6);
       scene.add(light);
 
@@ -100,9 +121,44 @@
       var mesh = new THREE.Mesh(geometry, material);
       mesh.rotation.x = -Math.PI / 2;
       scene.add(mesh);
+      
+      if (navigator.getUserMedia) {
+      
+        video = document.getElementById('monitor');
+        navigator.getUserMedia({video: true}, function(stream) {
+          video.src = window.URL.createObjectURL(stream);
+          video.play();
+        }, function(e) { console.log(e); });
+        document.body.appendChild(video);
+        
+      	videoImage = document.getElementById( 'videoImage' );
+      	videoImageContext = videoImage.getContext( '2d' );
+      	// background color if no video present
+      	videoImageContext.fillStyle = '#000000';
+      	videoImageContext.fillRect( 0, 0, videoImage.width, videoImage.height );
+      
+      	videoTexture = new THREE.Texture( videoImage );
+      	videoTexture.minFilter = THREE.LinearFilter;
+      	videoTexture.magFilter = THREE.LinearFilter;
+    	}
+    	
+    	var tex = navigator.getUserMedia ? videoTexture : texture;
+    	var movieMaterial = new THREE.MeshBasicMaterial( { map: tex, overdraw: true, side:THREE.DoubleSide } );
+    	// the geometry on which the movie will be displayed;
+    	// 		movie image will be scaled to fit these dimensions.
+    	var movieGeometry = new THREE.PlaneGeometry( 100, 100, 1, 1 );
+    	var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
+    	movieScreen.position.set(0,1,0);
+    	scene.add(movieScreen);
+    	
 
-      window.addEventListener('resize', resize, false);
-      setTimeout(resize, 1);
+      // rotate movie screen
+      movieScreen.rotation.x = -Math.PI / 2;
+      movieScreen.rotation.z = -Math.PI / 2;
+
+
+
+
     }
 
     function resize() {
@@ -132,7 +188,18 @@
       requestAnimationFrame(animate);
 
       update(clock.getDelta());
+            
+      if (navigator.getUserMedia) { 
+      	if ( video.readyState === video.HAVE_ENOUGH_DATA ) {
+      		videoImageContext.drawImage( video, 0, 0, videoImage.width, videoImage.height );
+      		if ( videoTexture ) 
+      			videoTexture.needsUpdate = true;
+      	}
+      }
       render(clock.getDelta());
+
+      
+      	//renderer.render( scene, camera );
     }
 
     function fullscreen() {
