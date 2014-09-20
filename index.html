@@ -16,12 +16,33 @@
         right: 0;
         bottom: 0;
       }
+      #mode {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        background: red;
+        padding: 10px;
+      }
     </style>
   </head>
   <body>
-    <div id="example"></div>
-<video id="monitor" autoplay width="160" height="120" style="visibility: hidden; float:left;"></video>
-<canvas id="videoImage" width="160" height="120" style="visibility: hidden; float:left;"></canvas>
+   <div id="example"></div>
+  <video id="monitor" autoplay width="160" height="120" style="visibility: hidden; float:left;"></video>
+  <canvas id="videoImage" width="160" height="120" style="visibility: hidden; float:left;"></canvas>
+  
+  <div id="mode">
+  how are you feeling?
+  <select>
+    <option value=""></option>
+    <option value="bad">bad</option>
+    <option value="pessimistic">pessimistic</option>
+    <option value="hungover">hungover</option>
+    <option value="narcissistic">narcissistic</option>
+  </select>
+      
+    
+  </div>
 
   <script src="js/third-party/threejs/three.min.js"></script>
   <script src="js/third-party/threejs/StereoEffect.js"></script>
@@ -95,6 +116,27 @@
       
       window.addEventListener('resize', resize, false);
       setTimeout(resize, 1);
+      
+      // listener for mode change
+      
+      var mode_controls = document.getElementById('mode');
+      mode_controls.addEventListener('change', function(e) {
+        var val = e.target.value;
+        setMode(val);
+      }, false);
+    }
+    
+    
+    function setMode(mode) {
+      if (mode === 'bad') {
+        
+      } else if (mode === 'pessimistic') {
+        
+      } else if (mode === 'hungover') {
+        
+      } else if (mode === 'narcissistic') {
+        
+      }
     }
     
     function initScene() {
