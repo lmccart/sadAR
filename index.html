@@ -128,8 +128,14 @@
     
     
     function setMode(mode) {
-      if (mode === 'bad') {
-        
+      if (mode === 'bad') {          
+        var modeMaterial = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+      	var modeGeometry = new THREE.PlaneGeometry( 40, 40, 1, 1 );
+      	var modeScreen = new THREE.Mesh( modeGeometry, modeMaterial );
+      	modeScreen.position.set(0,2,0);
+        modeScreen.rotation.x = -Math.PI / 2;
+        modeScreen.rotation.z = -Math.PI / 2;
+      	scene.add(modeScreen);
       } else if (mode === 'pessimistic') {
         
       } else if (mode === 'hungover') {
@@ -193,12 +199,9 @@
     	var movieGeometry = new THREE.PlaneGeometry( 50, 50, 1, 1 );
     	var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
     	movieScreen.position.set(0,1,0);
-    	scene.add(movieScreen);
-    	
-
-      // rotate movie screen
       movieScreen.rotation.x = -Math.PI / 2;
       movieScreen.rotation.z = -Math.PI / 2;
+    	scene.add(movieScreen);
 
 
 
