@@ -194,13 +194,27 @@
       scene.add(mesh);
       
       if (navigator.getUserMedia) {
-      
+        var help = MediaStreamTrack.getSources(function(sourceInfos) {
+          var camSource = [];
+        for (var i = 0; i != sourceInfos.length; ++i) {
+          var sourceInfo = sourceInfos[i];
+          if (sourceInfo.kind === 'video') {
+            camSource.push(sourceInfos[i].id);
+          } 
+        }
+
         video = document.getElementById('monitor');
-        navigator.getUserMedia({video: true}, function(stream) {
-          video.src = window.URL.createObjectURL(stream);
-          video.play();
+        var constraints = {
+              video: {
+                optional: [{sourceId: camSource[1]}]
+              }
+            };
+        navigator.getUserMedia(constraints, function(stream) {
+            video.src = window.URL.createObjectURL(stream);
+            video.play();
         }, function(e) { console.log(e); });
         document.body.appendChild(video);
+        });
         
       	videoImage = document.getElementById( 'videoImage' );
       	videoImageContext = videoImage.getContext( '2d' );
