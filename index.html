@@ -41,6 +41,7 @@
     <option value="pessimistic">pessimistic</option>
     <option value="hungover">hungover</option>
     <option value="narcissistic">narcissistic</option>
+    <option value="lonely">lonely</option>
   </select>
       
     
@@ -159,6 +160,14 @@
       	scene.add(modeScreen);
       } else if (mode === 'narcissistic') {
         
+      } else if (mode === 'lonely') {
+        var modeMaterial = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture('kitten_2.png'), blending: THREE["AdditiveAlphaBlending"]} );
+        var modeGeometry = new THREE.PlaneGeometry( 50, 50, 1, 1 );
+        modeScreen = new THREE.Mesh( modeGeometry, modeMaterial );
+        modeScreen.position.set(0,1,0);
+        modeScreen.rotation.x = -Math.PI / 2;
+        modeScreen.rotation.z = -Math.PI / 2;
+        scene.add(modeScreen);
       }
     }
     
