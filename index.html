@@ -143,10 +143,21 @@
         modeScreen.rotation.z = -Math.PI / 2;
       	scene.add(modeScreen);
       } else if (mode === 'pessimistic') {
-      
-        
+        var modeMaterial = new THREE.MeshBasicMaterial( { color: 0xFFFF99, transparent: true, blending: THREE.AdditiveBlending, opacity: 0.3 } );
+      	var modeGeometry = new THREE.PlaneGeometry( 50, 50, 1, 1 );
+      	modeScreen = new THREE.Mesh( modeGeometry, modeMaterial );
+      	modeScreen.position.set(0,1,0);
+        modeScreen.rotation.x = -Math.PI / 2;
+        modeScreen.rotation.z = -Math.PI / 2;
+      	scene.add(modeScreen);
       } else if (mode === 'hungover') {
-        
+        var modeMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, transparent: true, blending: THREE.Multiply, opacity: 0.5 } );
+      	var modeGeometry = new THREE.PlaneGeometry( 50, 50, 1, 1 );
+      	modeScreen = new THREE.Mesh( modeGeometry, modeMaterial );
+      	modeScreen.position.set(0,1,0);
+        modeScreen.rotation.x = -Math.PI / 2;
+        modeScreen.rotation.z = -Math.PI / 2;
+      	scene.add(modeScreen);
       } else if (mode === 'narcissistic') {
         
       }
