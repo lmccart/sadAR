@@ -72,7 +72,10 @@
     animate();
 
     function init() {
-
+      videoImage = document.getElementById( 'videoImage' );
+      videoImageContext = videoImage.getContext( '2d' );
+      videoImageContext.translate(videoImage.width, 0);
+      videoImageContext.scale(-1,1);
     
       renderer = new THREE.WebGLRenderer();
       element = renderer.domElement;
