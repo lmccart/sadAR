@@ -17,6 +17,7 @@
         bottom: 0;
       }
       #mode {
+        width: 100%;
         position: absolute;
         top: 0;
         left: 0;
@@ -37,10 +38,10 @@
   how are you feeling?
   <select>
     <option value=""></option>
+    <option value="bad">bad</option>
     <option value="pessimistic">pessimistic</option>
     <option value="hungover">hungover</option>
-    <option value="lonely">lonely</option>
-    <option value="bad">terrible</option>
+    <option value="narcissistic">narcissistic</option>
   </select>
       
     
@@ -72,6 +73,7 @@
     animate();
 
     function init() {
+
     
       renderer = new THREE.WebGLRenderer();
       element = renderer.domElement;
@@ -159,22 +161,6 @@
       	scene.add(modeScreen);
       } else if (mode === 'narcissistic') {
         
-      } else if (mode === 'lonely') {
-        var modeMaterial = new THREE.MeshBasicMaterial( {transparent: true, map: THREE.ImageUtils.loadTexture( 'textures/patterns/kitten.png' )} );
-        var modeGeometry = new THREE.PlaneGeometry( 30, 30, 1, 1 );
-        modeScreen = new THREE.Mesh( modeGeometry, modeMaterial );
-        modeScreen.position.set(-10,2,10);
-        modeScreen.rotation.x = - Math.PI / 2;
-        modeScreen.rotation.z = - Math.PI / 2;
-        scene.add(modeScreen);
-      } else if (mode === 'angry') {
-        var modeMaterial = new THREE.MeshBasicMaterial( {transparent: true, map: THREE.ImageUtils.loadTexture( 'textures/patterns/fire.gif' )} );
-        var modeGeometry = new THREE.PlaneGeometry( 0.1,0.1, 1, 1 );
-        modeScreen = new THREE.Mesh( modeGeometry, modeMaterial );
-        modeScreen.position.set(-10,-20,10);
-        modeScreen.rotation.x = - Math.PI / 2;
-        modeScreen.rotation.z = - Math.PI / 2;
-        scene.add(modeScreen);
       }
     }
     
@@ -206,27 +192,13 @@
       scene.add(mesh);
       
       if (navigator.getUserMedia) {
-        var help = MediaStreamTrack.getSources(function(sourceInfos) {
-          var camSource = [];
-        for (var i = 0; i != sourceInfos.length; ++i) {
-          var sourceInfo = sourceInfos[i];
-          if (sourceInfo.kind === 'video') {
-            camSource.push(sourceInfos[i].id);
-          } 
-        }
-
+      
         video = document.getElementById('monitor');
-        var constraints = {
-              video: {
-                optional: [{sourceId: camSource[1]}]
-              }
-            };
-        navigator.getUserMedia(constraints, function(stream) {
-            video.src = window.URL.createObjectURL(stream);
-            video.play();
+        navigator.getUserMedia({video: true}, function(stream) {
+          video.src = window.URL.createObjectURL(stream);
+          video.play();
         }, function(e) { console.log(e); });
         document.body.appendChild(video);
-        });
         
       	videoImage = document.getElementById( 'videoImage' );
       	videoImageContext = videoImage.getContext( '2d' );
